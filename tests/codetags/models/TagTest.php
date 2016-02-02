@@ -6,11 +6,46 @@
  * Time: 22:25
  */
 
-namespace CodePress\CodeTags\Tests\Models;
+
+use Orchestra\Testbench\TestCase;
+
+class AbstractTestCase extends TestCase
+{
+
+    public function migrate(){
+
+        $this->artisan('migrate', [
+            '--realpath' => realpath(__DIR__ . '/../../../src/resources/migrations')
+        ]);
+    }
+
+    /**
+     * Define environment setup.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return void
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        // Setup default database to use sqlite :memory:
+        $app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ]);
+    }
+}
+
+
+
+//namespace CodePress\CodeTags\Tests\Models;
 
 use CodePress\CodeTags\models\Post;
 use CodePress\CodeTags\models\Tag;
-use CodePress\CodeTags\Tests\AbstractTestCase;
+//use CodePress\CodeTags\Tests\Models\AbstractTestCase;
+
+//use CodePress\CodeTags\Tests\AbstractTestCase;
 
 
 class TagTest extends AbstractTestCase
